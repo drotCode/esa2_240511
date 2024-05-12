@@ -1,0 +1,169 @@
+  // create elements
+        let wrap = document.createElement("div")
+        wrap.id = name + "Wrap";
+        wrap.classList.add("wrap");
+        let paramNameElement = document.createElement("span")
+        paramNameElement.classList.add("paramName")
+        paramNameElement.innerText = name
+        wrap.append(paramNameElement)
+        this.inputs = Parameter.types.map((type) => {
+            attributes.type = type
+            attributes.id = name + type
+            let inputElement = document.createElement("input")
+            for (const key in attributes) {
+                inputElement.setAttribute(key, attributes[key])
+            }
+            let labelElement = document.createElement("label")
+            labelElement.setAttribute("for", attributes.id)
+            labelElement.classList.add("hidden")
+            labelElement.innerText = attributes.id;
+            wrap.append(labelElement, inputElement)
+            return inputElement;
+
+        })
+        Parameter.mainWrap.append(wrap)
+    
+    
+    
+        <div id="hgbWrap" class="wrap">
+            <div class="inputLabel">
+            <label for="hgb">hgb</label>
+            <input type="range" name="hgbRange" id="hgbRange" min="9" max="13" step="0.1" value="10">
+            <input type="number" name="hgbNumber" id="hgbNumber" min="9" max="13" step="0.1" value="10">
+            </div>
+        </div>
+
+        <div id="kgWrap" class="wrap">
+            <div class="inputLabel">
+            <label for="kg">kg</label>
+            <input type="range" name="kgRange" id="kgRange" min="10" max="150" step="0.5" value="50">
+            <input type="number" name="kgNumber" id="kgNumber" min="10" max="150" step="0.5" value="50">
+            </div>
+        </div>
+
+        <div id="eritroptnWrap" class="wrap">
+            <div class="inputLabel">
+            <label for="eritroptn">eritroptn</label>
+            <input type="number" name="eritroptnNumber" id="eritroptnNumber" min="75" max="22500" step="75" value="7500">
+            <input type="range" name="eritroptnRange" id="eritroptnRange" min="75" max="22500" step="75" value="7500">
+        </div>
+    </div>
+    
+    <div id="darbeptnWrap" class="wrap">
+        <div class="inputLabel">
+            <label for="darbeptn">darbeptn</label>
+            <input type="number" name="darbeptnNumber" id="darbeptnNumber" min="0.35" max="105" step="0.35" value="37.5">
+            <input type="range" name="darbeptnRange" id="darbeptnRange"  min="0.35" max="105" step="0.35" value="37.5">
+            </div>
+        </div>
+
+
+
+const toggleHidden = (element) => { element.classList.toggle("hidden") }
+
+const parameterWords = [
+    "hgb",
+    "kg",
+    "eritroptn",
+    "darbeptn",
+]
+
+class Parameter {
+    #value
+  { value: value, min: min, max: max, step: step }
+  
+  
+  
+    #name
+    #decimals
+    constructor({ name: name, decimals: decimals, initialValue : initialValue }) {
+        this.#name = name
+        this.#decimals = decimals
+        this.#value = initialValue
+        this.elements = {
+            wrap: document.getElementById(this.#name + "Wrap"),
+            range: document.getElementById(this.#name + "Range"),
+            number: document.getElementById(this.#name + "Number"),
+        }
+        this.inputElements = [this.elements.range, this.elements.number]
+        this.render()
+
+    }
+    render() { for (const inputElement of this.inputElements) { inputElement.value = this.#value } }
+    get value() { return  +this.#value; }
+    set value(value) {
+        this.#value =  +value
+        this.render()
+    }
+
+    unRender() { this.value = this.elements.number.value }
+
+}
+
+const hgb = new Parameter({ name: "hgb",initialValue :10, decimals: 1 })
+const kg = new Parameter({ name: "kg", initialValue :50,decimals: 1 })
+const eritroptn = new Parameter({ name: "eritroptn", initialValue : 7500,decimals: 1 })
+const darbeptn = new Parameter({ name: "darbeptn",initialValue :37.5, decimals: 1 })
+
+hgb.elements.wrap.addEventListener("input", (e) => { 
+    // hgb.value = e.target.value
+    hgb.unRender()
+    eritroptn.value = (hgb.value < 11 ? 150 : 75) * kg.value
+    darbeptn.value = (hgb.value < 11 ? 0.75 : 0.35) * kg.value
+ })
+// kg.elements.wrap.addEventListener("input", (e) => { 
+//     kg.value = e.target.value
+//     eritroptn.value = (hgb.value < 11 ? 150 : 75) * kg.value
+//     darbeptn.value = (hgb.value < 11 ? 0.75 : 0.35) * kg.value
+//  })
+
+
+
+
+
+
+
+
+
+
+
+const el = Object.fromEntries(elClasses.map(cname => [cname, document.querySelector("." + cname)]))
+
+const parameterClasses = parameterWords.map(word => [word + "Wrap", word + "Number", word + "Range"])
+const paramEls = parameterClasses
+const elClasses = [
+
+
+].flat(9)
+
+https://elementor.com/blog/font-pairing/
+1. Abril Fatface & Lato
+2. Alegreya Sans Black & Alegreya
+3. Aqua Grotesque & Roboto Slab Thin
+4. Archivo Black & Roboto
+5. Bebas Neue & Old Standard TT
+6. Cooper Hewitt Heavy & Cooper Hewitt Thin
+7. Exo 2 & Alegreya Sans
+8. Fira Sans Black & PT Serif
+9. Josefin Sans Bold & Josefin Slab Semi-Bold
+10. Karla Bold & Spectral Light
+11. Lato & Merriweather
+12. Lato & Roboto
+13. League Gothic & PT Serif
+14. League Spartan & Libre Baskerville
+15. Libre Baskerville & Source Sans Pro
+16. Libre Franklin & Libre Baskerville
+17. Lobster & Roboto Condensed
+18. Lora & Merriweather
+19. Merriweather Sans Bold & Merriweather
+20. Montserrat & Droid Serif
+21. Neue Helvetica & EB Garamond Medium
+22. Nexa Bold & Crimson Pro
+23. Noir Pro & Playfair Display
+24. Open Sans & Source Sans
+25. Oswald & Montserrat Extra Light
+26. Oswald & Old Standard TT
+27. Playfair Display & Raleway Thin
+28. PT Sans & PT Serif
+29. Raleway & Merriweather
+30. Source Sans Pro & Times New Roman

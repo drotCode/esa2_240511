@@ -1,0 +1,80 @@
+<!--#region HEAD -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>ESA2</title>
+    <link rel="stylesheet" href="myDefault.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<!--endregion -->
+<body>
+    <nav></nav>
+    <main>
+
+
+
+        <section class="firstSection">
+            <div id="hgbWrap" class="hgb wrap">
+                <header class="paramName">hgb</span>
+                <input value="10" min="5" max="12" step="0.01" type="Range" id="hgbRange">
+                <input value="10" min="5" max="12" step="0.01" type="Number" id="hgbNumber">
+                <span class="unit">gr/dl</span>
+            </div>
+            <div id="kgWrap" class=" kg wrap">
+                <header class="paramName">kütle</span>
+                <input value="50" min="1" max="100" step="0.5" type="Range" id="kgRange">
+                <input value="50" min="1" max="100" step="0.5" type="Number" id="kgNumber">
+                <span class="unit">kg</span>
+            </div>
+            <div id="ertrptnWrap" class="ertrptn wrap">
+                <header class="paramName">ertrptn</span>
+                <input value="7500" min="75" max="15000" step="75" type="Range" id="ertrptnRange">
+                <input value="7500" min="75" max="15000" step="75" type="Number" id="ertrptnNumber">
+                <span class="unit">IU/kg/hafta</span>
+            </div>
+            <div id="drbptnWrap" class="drbptn wrap">
+                <header class="paramName">drbptn</span>
+                <input value="37.5" min="0.35" max="75" step="0.35" type="Range" id="drbptnRange">
+                <input value="37.5" min="0.35" max="75" step="0.35" type="Number" id="drbptnNumber">
+                <span class="unit">mcg/kg/hafta</span>
+            </div>
+        </section>
+        <section id="formSection" class="formSection">
+            <div class="inLab hgbDate">
+                <input type="date" name="hgbDateForm" id="hgbDateForm">
+            </div>
+            <div class="inLab ferritin">
+                <input type="number" name="ferritinForm" id="ferritinForm">
+            </div>
+            <!-- noformat -->
+            <div class="inLab ferritinDate">
+                <input type="date" name="ferritinDateForm" id="ferritinDateForm">
+            </div>
+            <!-- noformat -->
+        </section>
+        <section id="textSection" class="textSection">
+            <p id="ertrptnText"> Hb:
+                <span class="hgbSpan">10</span>
+                &lpar;<span class="hgbDateSpan ">01.04.2024</span>&rpar; Ferritin:
+                <span class="ferritinSpan">221</span>
+                &lpar;<span class="ferritinDateSpan">01.04.2024</span>&rpar; Hasta
+                <span class="kgSpan">68</span> kg olup
+                <span class="perKgErtrptnSpan">0.75</span> IU/kg/hafta dozundan kullanımı uygundur.
+            </p>
+            <p id="drbptnText"> Hb:
+                <span class="hgbSpan">10</span> &lpar;
+                <span class="hgbDateSpan">01.04.2024</span>&rpar; Ferritin:
+                <span class="ferritinSpan">221</span> &lpar;
+                <span class="ferritinDateSpan">01.04.2024</span>&rpar; Hasta
+                <span class="kgSpan">68</span> kg olup
+                <span class="perKgDrbptnSpan">0.75</span> mcg /kg/hafta dozundan kullanımı uygundur.
+            </p>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+</html>

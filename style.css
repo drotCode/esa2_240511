@@ -1,0 +1,182 @@
+/*#region ---------- ----------* MY CONFIG *---------- ---------- ----- */
+html {
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    min-height: 100dvh;
+    margin: auto;
+    overflow: hidden;
+}
+nav,
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main,
+article,
+section,
+div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+/*#endregion ---------------------* MY CONFIG *--------------------------- */
+/* -------------------------------------------------------------------------- */
+/*#region ---------------------* MAIN *--------------------------- */
+html {
+    /* bg colors */
+    --bg_Html: hsl(0, 0%, 98%);
+    --bg_Wrap: hsla(0, 0%, 100%, 0.9);
+    --bg_WrapInput: hsla(0, 0%, 95%, 0.2);
+    /* theme colors */
+    --clr_Hgb: hsla(350, 100%, 50%, 100%);
+    --clr_Kg: rgb(65, 34, 0);
+    --clr_Ertrptn: hsla(290, 100%, 50%, 100%);
+    --clr_Drbptn: hsla(260, 100%, 50%, 100%);
+    --clr_Ferritin: hsl(190, 100%, 40%);
+
+    /* other variable */
+    --opacityRange: 0.7;
+    /* properties */
+    background-color: var(--bg_Html);
+}
+* {
+    color: var(--textColor1);
+}
+main {
+    width: min(100%, 1000px);
+    position: relative;
+    justify-content: flex-start;
+}
+main > section {
+    width: 100%;
+}
+.firstSection {
+    flex-flow: row wrap;
+}
+.firstSection .wrap {
+    width: 9rem;
+    position: relative;
+    background-color: var(--bg_Wrap);
+    /* transition: 500ms; */
+    margin: 0.5rem;
+    height: 20rem;
+    justify-content: center;
+}
+input {
+    background-color: var(--bg_WrapInput);
+    font-size: 1.25rem;
+}
+.wrap input[type=number] {
+    width: 6rem;
+    padding: 0.25rem 0rem 0.25rem 0.50rem;
+    position: absolute;
+    top: 1rem;
+}
+.wrap input[type=range] {
+    width: 15rem;
+    margin-top: 2rem;
+    opacity: var(--opacityRange);
+    rotate: -90deg;
+}
+.unit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    opacity: 0.3;
+}
+.paramName {
+    text-transform: capitalize;
+    font-size: 1.25rem;
+    position: absolute;
+    text-align: left;
+    width: 18rem;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    rotate: -90deg;
+    font-size: 3rem;
+    /* padding-left: 1.5rem; */
+    z-index: -1;
+}
+#hgbWrap {
+    color: var(--clr_Hgb);
+    accent-color: var(--clr_Hgb);
+}
+#kgWrap {
+    color: var(--clr_Kg);
+    accent-color: var(--clr_Kg);
+}
+#ertrptnWrap {
+    color: var(--clr_Ertrptn);
+    accent-color: var(--clr_Ertrptn);
+}
+#drbptnWrap {
+    color: var(--clr_Drbptn);
+    accent-color: var(--clr_Drbptn);
+}
+.lowDose {
+    filter: brightness(0.95);
+}
+.noDose {
+    filter: brightness(0.85);
+}
+.form {
+    flex-flow: row wrap;
+    width: 100%;
+}
+#textSection {
+    width: min(98%, 800px);
+    align-items: flex-start;
+}
+/* color match */
+.hgbSpan, .hgbDate, .hgbDateSpan {
+    color: var(--clr_Hgb);
+} 
+
+.ferritinSpan, .ferritinDateSpan {
+    color: var(--clr_Ferritin);
+}
+.kgSpan {
+    color: var(--clr_Kg);
+}
+.perKgErtrptnSpan {
+    color: var(--clr_Ertrptn);
+}
+.perKgDrbptnSpan {
+    color: var(--clr_Drbptn);
+}
+
+.ferritin {
+    
+}
+.ferritinDate {
+    
+}
+
+
+/*#endregion ---------------------* MAIN *--------------------------- */
+/* -------------------------------------------------------------------------- */
+/*#region ---------------------* MEDIA *--------------------------- */
+@media screen and (width > 720px) {}
+@media screen and (width > 1000px) {}
+@media screen and (width > 1200px) {}
+@media screen and (width > 1600px) {}
+/*#endregion ---------------------* MEDIA *--------------------------- */
+/* -------------------------------------------------------------------------- */
+/*#region ---------------------* UTILS *--------------------------- */
+.hidden {
+    display: none;
+}
+.row {
+    flex-direction: row;
+}
+/*#endregion ---------------------* UTILS *--------------------------- */
+/* *For Development */
+body * {
+    border: 1px dotted red;
+}
