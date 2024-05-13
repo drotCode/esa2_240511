@@ -1,87 +1,39 @@
 const toggleHidden = (element) => { element.classList.toggle("hidden") }
-let blurAnim = {
-    args: [[{ filter: "blur(2px)" }, { filter: "blur(0px)" },], { duration: 200 }],
-    playOn(element) { element.animate(...this.args) }
-}
-
-
-const names = {
-    hgb: {
-        wrap: {
-            header: 0,
-            input: { range: 0, number: 0, },
-            unit: 0,
-        },
-        form: { date: 0, },
-        text: { value: 0, date: 0, }
-    },
-
-    kg: {
-        wrap: {
-            header: 0,
-            input: { range: 0, number: 0, },
-            unit: 0,
-        },
-        text: { value: 0, }
-    },
-
-    ertrptn: {
-        wrap: {
-            header: 0,
-            input: { range: 0, number: 0, },
-            unit: 0,
-        },
-        text: { perKg: 0, }
-    },
-
-    drbptn: {
-        wrap: {
-            header: 0,
-            input: { range: 0, number: 0, },
-            unit: 0,
-        },
-        text: { perKg: 0, }
-    },
-
-    ferritin: {
-        form: { value: 0, date: 0, },
-        text: {
-            span: { value: 0, date: 0, },
-        }
-    },
-test: 0
-}
-
-
+const blurItem = (el) => { el.animate([{ filter: "blur(2px) brightness(1.1)" }, { filter: "blur(0px)" },], { duration: 100 }) }
 
 class Parameter {
-    constructor(name, value, decimals, options = {}) {
+    constructor(name, value, decimals, option = {}) {
         this.name = name;
         this.value = value
         this.decimals = decimals
-        this.options = options
-        this.textElements = document.querySelectorAll("." + name + "Span")
-        this.wrap = document.getElementById(name + "Wrap")
-        this.rangeInput = document.getElementById(name + "Range")
-        this.numberInput = document.getElementById(name + "Number")
-        this.inputs = [this.numberInput, this.rangeInput]
+        this.option = option
+
+        this.element = {
+            section: document.querySelector(`.article1 > .${name}`),
+            input: {
+                number: document.querySelector(`.article1 > .${name} input[type=number]`),
+                range: document.querySelector(`.article1 > .${name} input[type=range]`),
+            },
+            text:{
+               valueText: document.querySelectorAll(`.article3 .${name}.value`),
+               date: document.querySelectorAll(`.article3 .${name}.date`),
+
+            } 
+        };
+        this.afterSet = []
     }
     setValue(x) {
-        if (x > this.options.max) { return; }
         x = (+x).toFixed(this.decimals);
-        if (this.value != x) {
-            this.value = x;
-            blurAnim.playOn(this.numberInput)
-        }
-        this.inputs.forEach((input) => input.value = x)
-        this.textElements.forEach((textElement) => textElement.innerText = x)
+        if (x > this.option.max || x == this.value) { return; } else { this.value = x; }
+        let element = this.element;
+        [element.input.number, element.input.range, ...element.text.valueText].forEach((el) => {
+            if(el){
+                el.innerText = el.value = x;
+                blurItem(el)
+            } 
+        })
+        this.afterSet.forEach((fn) => fn())
     }
-}
-
-const perKg = {
-    get ertrptn() { return hgb.value <= 11 ? 150 : hgb.value <= 12 ? 75 : 0 },
-    get drbptn() { return hgb.value <= 11 ? 0.75 : hgb.value <= 12 ? 0.35 : 0 },
-    // type: // 0 1 2
 }
 
 let hgb = new Parameter("hgb", 10, 2)
@@ -89,74 +41,78 @@ let kg = new Parameter("kg", 50, 1, { max: 100 })
 let ertrptn = new Parameter("ertrptn", 7500, 0)
 let drbptn = new Parameter("drbptn", 37.5, 1)
 
+hgb.setPerKg = () => {
+    let ertEl  = document.querySelectorAll(".perKg.ertrptn");
+    let  drbEl  = document.querySelectorAll(".perKg.drbptn");
+    if (hgb.value < 11) {
+        [ertrptn.perKg, drbptn.perKg] = [150, 0.75];
+        hgb.element.section.classList.add("low")
+    } else {
+        [ertrptn.perKg, drbptn.perKg] = [75, 0.35];
+        hgb.element.section.classList.remove("low")
+    }
+    ertEl.forEach((el) => el.innerText = ertrptn.perKg)
+    drbEl.forEach((el) => el.innerText = drbptn.perKg)
 
+}
+hgb.date = {
+    inputElement : document.querySelector(".article2 .hgb"),
+    article3Elements: document.querySelectorAll(".article3 .hgb.date"),
+    init() {
+        this.inputElement.addEventListener("input", ({target:{value}}) => {
+            for (const article3Element of this.article3Elements) {
+                article3Element.innerText = value
+            }
+            
+        })
+        delete this.init
+    }
+}
+hgb.date.init()
+
+const ferritin = {
+    input: {
+        date:document.querySelector(".article2 .ferritin.date"),
+        value:document.querySelector(".article2 .ferritin.value"),
+    },
+    article3: {
+        date:document.querySelectorAll(".article3 .ferritin.date"),
+        value:document.querySelectorAll(".article3 .ferritin.value"),
+     },
+     init() {
+        for (const key in this.input) {
+            let inputElement = this.input[key]
+            let article3Elements = this.article3[key]
+            inputElement.addEventListener("input", ({target:{value}}) => {
+                for (const element of article3Elements) {
+                    element.innerText = value
+                }
+            })
+        }
+        delete this.init
+     }
+}
+ferritin.init()
 const updateDoses = () => {
-    ertrptn.setValue(perKg.ertrptn * kg.value)
-    drbptn.setValue(perKg.drbptn * kg.value)
-
+    [ertrptn, drbptn].forEach((param) => {
+        param.setValue(param.perKg * kg.value)
+    })
 }
 
-hgb.inputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        hgb.setValue(e.target.value)
+hgb.afterSet.push(hgb.setPerKg, updateDoses,)
+kg.afterSet.push(updateDoses)
 
-        updateDoses()
+ertrptn.afterSet.push(() => kg.setValue(ertrptn.value / ertrptn.perKg))
+drbptn.afterSet.push(() => kg.setValue(drbptn.value / drbptn.perKg))
 
-
-
-        let val = e.target.value
-        let cont = hgb.wrap
-        val > 12 ? cont.classList.add("noDose")
-            : val > 11 ? cont.classList.add("lowDose") : null;
-        val < 11 ? cont.classList.remove("lowDose")
-            : val < 12 ? cont.classList.remove("noDose") : null;
-
-        document.querySelectorAll(".perKgErtrptnSpan").forEach((span) => {
-            span.innerText = perKg.ertrptn
-        });
-        document.querySelectorAll(".perKgDrbptnSpan").forEach((span) => {
-            span.innerText = perKg.drbptn
-        });
-
-
-    })
-})
-kg.inputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        kg.setValue(e.target.value)
-        updateDoses()
-
-
-    })
-})
-
-ertrptn.inputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        ertrptn.setValue(e.target.value)
-        kg.setValue(ertrptn.value / perKg.ertrptn)
-        updateDoses()
-    })
-})
-drbptn.inputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        drbptn.setValue(e.target.value)
-        kg.setValue(drbptn.value / perKg.drbptn)
-        updateDoses()
-    })
-})
-
-let nonparam = {
-    dates: ["hgb", "ferritin"],
-    numbers: ["ferritin"]
-}
-
-nonparam.dates.map(word => word + "Date").forEach((word) => {
-    document.getElementById(word + "Form").addEventListener("input", ({ target: { value: dateString } }) => {
-        document.querySelectorAll("." + word + "Span").forEach((span) => {
-            let dateStringTr = dateString.split("-").toReversed().join(".")
-            span.innerText = dateStringTr
-
+let allParams = [hgb, kg, ertrptn, drbptn];
+allParams.forEach((param) => {
+    Object.values(param.element.input).forEach((input) => {
+        input.addEventListener("input", ({ target: { value } }) => {
+            param.setValue(value)
         })
     })
 })
+
+
 
